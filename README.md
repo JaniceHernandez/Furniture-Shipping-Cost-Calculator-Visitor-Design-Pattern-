@@ -8,12 +8,15 @@ The system must calculate shipping fees based on:
 - Size (cubic centimeters)
 - Shipping method (flat rate or distance-based)
 
-To achieve flexibility and avoid tight coupling between furniture classes and shipping logic, we use the **Visitor Design Pattern**.
+Instead of placing shipping logic inside furniture classes, the **Visitor Design Pattern** is used.  
+This allows shipping algorithms to be separated from furniture objects.
 
-This design allows:
-- Shipping calculations to be handled by visitor classes
-- New shipping strategies to be added without modifying furniture classes
-- Separation of concerns between objects and operations
+Benefits of this design:
+
+- Avoids tight coupling between furniture data and shipping logic
+- Makes it easier to add new shipping strategies
+- Follows the **Open/Closed Principle**
+- Keeps the furniture class simple while allowing flexible operations
 
 ---
 
@@ -24,38 +27,28 @@ This design allows:
 
 ## Components
 
-### 1. Visitor Interface
-- Represented by `ShippingCostCalculator.java`.
-- Defines the method used to calculate shipping cost.
+### 1. Visitor Interfaces
+- **ShippingCalculator** – Handles flat rate shipping.
+- **DistanceShipping** – Handles distance-based shipping.
+
+These interfaces define operations that can be performed on furniture objects.
 
 ### 2. Visitable Interface
-- Represented by `Furniture.java`.
-- Declares the `accept()` method that allows visitors to perform operations on furniture objects.
+- Represented by **Furniture.java**
+- Declares `accept()` methods
+- Furniture objects delegate shipping computation to visitors
 
-### 3. Concrete Visitable Classes
-These classes implement the `Furniture` interface:
-- `Chair`
-- `Table`
-- `Sofa`
+### 3. Concrete Visitable Class
+- **FurnitureItem** (single class for all furniture types)
 
-Each class overrides the `accept()` method and passes its size and type to the visitor.
+Fields:
+- `furnitureType` (Chair, Table, Sofa)
+- `size` (in cubic centimeters)
+
+The `accept()` method allows visitors to process shipping calculations.
 
 ### 4. Concrete Visitor Classes
 
 #### FlatRateShipping
-- Applies a **flat shipping fee** for small furniture items.
-- Uses a **size threshold** to determine if the flat rate should be applied.
-
-#### DistanceBasedShipping
-- Calculates shipping based on **delivery distance** for larger furniture items.
-- Uses the formula:  
-  `Shipping Cost = Base Fee + (Distance × Rate)`
-
-### 5. Client
-- Represented by `FurnitureShop.java`.
-- Creates furniture objects and shipping visitors.
-- Sends the shipping calculation request using the `accept()` method.
-
-### 6. Context
-- The context includes the `Furniture` objects and visitor implementations.
-- The system allows different shipping calculations to be applied dynamically to the furniture items.
+- Applies flat shipping fee for small items
+- Uses size threshold to determine eligibility

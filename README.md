@@ -21,7 +21,7 @@ Benefits of this design:
 ---
 
 ## UML Class Diagram
-*(Insert UML Diagram here if available)*
+<img width="2036" height="1155" alt="visitorPattern UML Diagram" src="https://github.com/user-attachments/assets/e06f1f3d-bbdd-484f-afca-5a24d2b9b2eb" />
 
 ---
 
